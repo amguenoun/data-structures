@@ -39,12 +39,18 @@ class BinarySearchTree:
                 return find(node.left)
             else:
                 return find(node.right)
-                
+
         return find(self)
 
     # Return the maximum value found in the tree
     def get_max(self):
-        pass
+        def traverse_right(node):
+            if node.right:
+                return traverse_right(node.right)
+            else:
+                return node.value
+                
+        return traverse_right(self)
 
     # Call the function `cb` on the value of each node
     # You may use a recursive or iterative approach
