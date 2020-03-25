@@ -12,8 +12,21 @@ class BinarySearchTree:
 
     # Insert the given value into the tree
     def insert(self, value):
-        pass
+        def traverse(node):
+            if value < node.value:
+                if node.left:
+                    traverse(node.left)
+                else:
+                    node.left = BinarySearchTree(value)
+            else:
+                if node.right:
+                    traverse(node.right)
+                else:
+                    node.right = BinarySearchTree(value)
 
+
+        traverse(self)
+    
     # Return True if the tree contains the value
     # False if it does not
     def contains(self, target):
