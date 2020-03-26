@@ -24,8 +24,7 @@ class LRUCache:
     def get(self, key):
         if key in self.cache: #if key exists in cache returns value of node
             node = self.cache[key]
-            self.storage.delete(node)
-            self.storage.add_to_head((key, node.value[1]))
+            self.storage.move_to_front(node)
             return node.value[1]
         else:
             return None #else returns none
