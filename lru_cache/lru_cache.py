@@ -1,3 +1,5 @@
+from doubly_linked_list import DoublyLinkedList
+
 class LRUCache:
     """
     Our LRUCache class keeps track of the max number of nodes it
@@ -7,7 +9,10 @@ class LRUCache:
     to every node stored in the cache.
     """
     def __init__(self, limit=10):
-        pass
+        self.limit = limit
+        self.size = 0
+        self.storage = DoublyLinkedList() 
+        self.cache = {} # key : node pointer
 
     """
     Retrieves the value associated with the given key. Also
@@ -17,7 +22,13 @@ class LRUCache:
     key-value pair doesn't exist in the cache.
     """
     def get(self, key):
-        pass
+        if key in self.cache: #if key exists in cache returns value of node
+            node = self.cache[key]
+            self.storage.move_to_front(node)
+            return node.value[1]
+        else:
+            return None #else returns none
+
 
     """
     Adds the given key-value pair to the cache. The newly-
@@ -30,4 +41,17 @@ class LRUCache:
     the newly-specified value.
     """
     def set(self, key, value):
-        pass
+        if key in self.cache: #Checks if key exists in cache and if yes
+            node = self.cache[key] #grabs the node pointer
+            self.storage.delete(node)  #removes node from position in DLL
+            self.storage.add_to_head((key, value)) #adds node to head
+            self.cache[key] = self.storage.head #updates the pointer in cache to head
+        elif len(self.cache) >= self.limit: #Checks if cache is over limit, if yes
+            self.cache.pop(self.storage.tail.value[0]) #removes last item from cache
+            self.storage.remove_from_tail() #removed last node from DLL
+            self.storage.add_to_head((key,value)) #adds new node to DLL
+            self.cache[key] = self.storage.head #adds new item in cache pointing to new node
+        else:
+            self.size += 1 #updates size
+            self.storage.add_to_head((key,value)) #adds new node to DLL
+            self.cache[key] = self.storage.head #adds new pointer to cache
